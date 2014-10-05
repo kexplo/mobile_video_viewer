@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initaial-scale=1">
+	<link rel="stylesheet" href="./jquery.mobile-1.4.3.min.css">
+	<script src="./jquery-1.11.1.min.js"></script>
+	<script src="./jquery.mobile-1.4.3.min.js"></script>
+</head>
+<body>
+	<div data-role="page" id="pageone">
+		<div data-role="header">
+			<h1>Video Viewer</h1>
+		</div>
+
+		<div data-role="main" class="ui-content">
+			<label for="select-episode">영상 선택:</label>
+			<select name="select-episode" id="select-episode">
+			</select>
+
+			<div class="ui-body ui-body-a ui-corner-all">
+				<p>영상을 선택하고, 보기 버튼을 누르세요.</p>
+			</div>
+			<button data-icon="star" class="ui-btn ui-btn-a ui-icon-star ui-btn-icon-left ui-shadow ui-corner-all" id="btn-show">보기</button>
+		</div>
+
+		<div data-role="footer" data-position="fixed">
+			<h1>by kexplo</h1>
+		</div>
+	</div>
+
+	<div data-role="page" id="pagetwo">
+		<div data-role="header">
+			<h1 id="episode_h1">현재 : 1</h1>
+		</div>
+
+		<div data-role="main" class="ui-content">
+			<button data-icon="video" class="ui-btn ui-btn-a ui-icon-video ui-btn-icon-left ui-shadow ui-corner-all" id="btn-fullscreen">전체화면으로 재생</button>
+			
+			<video controls="controls" id="video-cont" width="100%">
+				<source type="video/mp4" src="" width="640" height="360" id="video-src"/>
+			</video>
+
+			<button data-icon="back" class="ui-btn ui-btn-a ui-icon-back ui-btn-icon-left ui-shadow ui-corner-all" id="btn-back">영상 선택으로 돌아가기</button>
+		</div>
+	
+	</div>
+
+	<script type="text/javascript">
+		var episode_mp4 = new Array();
+		// add episode. 
+		// ex)  episode_mp4 = ["aa_01.mp4", "aa_02.mp4"];
+		episode_mp4 = [];
+
+		$(function()
+		{
+			$("#btn-show").click(function()
+				{
+					var episode = $("#select-episode").val();
+					$("#episode_h1").text("현재 : " + episode_mp4[episode]);
+
+					$.mobile.changePage("#pagetwo");
+
+					var videoCont = $("#video-cont").get(0);
+					videoCont.src = episode_mp4[episode];
+					videoCont.load();
+				});
+			$("#btn-back").click(function()
+				{
+					$.mobile.back();
+				});
+			$("#btn-fullscreen").click(function()
+				{
+					var videoCont = $("#video-cont").get(0);
+					videoCont.webkitEnterFullscreen();
+					videoCont.play();
+				});
+
+			$.each(episode_mp4, function(idx, val){
+				$("#select-episode").append('<option value="' + idx + '">' + val + '</option>');
+			});
+		});
+	</script>
+</body>
+</html>
