@@ -3,9 +3,9 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initaial-scale=1">
-	<link rel="stylesheet" href="./jquery.mobile-1.4.3.min.css">
-	<script src="./jquery-1.11.1.min.js"></script>
-	<script src="./jquery.mobile-1.4.3.min.js"></script>
+	<link rel="stylesheet" href="{{ url_for('static', filename='jquery.mobile-1.4.3.min.css') }}">
+	<script src="{{ url_for('static', filename='jquery-1.11.1.min.js') }}"></script>
+	<script src="{{ url_for('static', filename='jquery.mobile-1.4.3.min.js') }}"></script>
 </head>
 <body>
 	<div data-role="page" id="pageone">
@@ -16,6 +16,7 @@
 		<div data-role="main" class="ui-content">
 			<label for="select-episode">영상 선택:</label>
 			<select name="select-episode" id="select-episode">
+				<option value="-1">---</option>
 			</select>
 
 			<div class="ui-body ui-body-a ui-corner-all">
@@ -50,7 +51,11 @@
 		var episode_mp4 = new Array();
 		// add episode. 
 		// ex)  episode_mp4 = ["aa_01.mp4", "aa_02.mp4"];
-		episode_mp4 = [];
+		episode_mp4 = [
+{%- for filename in fileList -%}
+	'{{filename}}',
+{%- endfor -%}
+		];
 
 		$(function()
 		{
@@ -62,7 +67,7 @@
 					$.mobile.changePage("#pagetwo");
 
 					var videoCont = $("#video-cont").get(0);
-					videoCont.src = episode_mp4[episode];
+					videoCont.src = '/v/' + episode_mp4[episode];
 					videoCont.load();
 				});
 			$("#btn-back").click(function()
